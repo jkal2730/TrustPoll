@@ -9,8 +9,7 @@ contract TrustPoll {
     error CountNotOpen();
     error IsNotCandidate();
     error AlreadyVoted();
-    error AlreadyCandidate();
-    error AlreadyCounted();
+    error AlreadyRegistered();
 
     enum PollPhase {
         REGISTER,
@@ -29,6 +28,7 @@ contract TrustPoll {
     PollPhase private s_pollPhase;
 
     mapping(address => uint256) public s_votes;
+    mapping(address => bool) private s_isCandidate;
     mapping(address => bool) private s_hasVoted;
 
     constructor(uint256 entranceFee, uint256 voteDuration, uint256 registerDuration) {
@@ -49,13 +49,6 @@ contract TrustPoll {
         }
     }
 
-    function isCandidate(address addr) internal view returns (bool) {
-        for (uint256 i = 0; i < s_candidates.length; i++) {
-            if (s_candidates[i] == addr) return true;
-        }
-        return false;
-    }
-
     function participate() external payable {
         updatePhase();
 
@@ -63,8 +56,9 @@ contract TrustPoll {
 
         if (msg.value < i_entranceFee) revert SendMoreEth();
 
-        if (isCandidate(msg.sender)) revert AlreadyCandidate();
+        if (s_isCandidate[msg.sender]) revert AlreadyRegistered();
 
+        s_isCandidate[msg.sender] = true;
         s_candidates.push(payable(msg.sender));
     }
 
@@ -73,7 +67,7 @@ contract TrustPoll {
 
         if (s_pollPhase != PollPhase.VOTING) revert VoteNotOpen();
 
-        if (isCandidate(candidate) == false) revert IsNotCandidate();
+        if (!s_isCandidate[candidate]) revert IsNotCandidate();
 
         if (s_hasVoted[msg.sender]) revert AlreadyVoted();
 
@@ -85,7 +79,6 @@ contract TrustPoll {
         updatePhase();
 
         if (s_pollPhase != PollPhase.ENDED) revert CountNotOpen();
-        if (resultCalculated) revert AlreadyCounted();
 
         uint256 winnerIndex = 0;
         results = new uint256[](s_candidates.length);
@@ -99,5 +92,17 @@ contract TrustPoll {
 
     function getPollResult() external view returns (address winner, uint256[] memory votes) {
         return (s_winner, results);
+    }
+
+    function getPollPhase() external view returns (PollPhase) {
+        return s_pollPhase;
+    }
+
+    function getEntranceFee() external view returns (uint256) {
+        return i_entranceFee;
+    }
+
+    function getRegisterDuration() external view returns (uint256) {
+        return i_registerDuration;
     }
 }
