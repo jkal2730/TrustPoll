@@ -31,7 +31,11 @@ contract TrustPoll {
     mapping(address => bool) private s_isCandidate;
     mapping(address => bool) private s_hasVoted;
 
-    constructor(uint256 entranceFee, uint256 voteDuration, uint256 registerDuration) {
+    constructor(
+        uint256 entranceFee,
+        uint256 voteDuration,
+        uint256 registerDuration
+    ) {
         i_entranceFee = entranceFee;
         i_voteDuration = voteDuration;
         i_registerDuration = registerDuration;
@@ -40,16 +44,20 @@ contract TrustPoll {
     }
 
     function updatePhase() internal {
-        if (s_pollPhase == PollPhase.REGISTER && block.timestamp > s_startTime + i_registerDuration) {
+        if (
+            s_pollPhase == PollPhase.REGISTER &&
+            block.timestamp > s_startTime + i_registerDuration
+        ) {
             s_pollPhase = PollPhase.VOTING;
         } else if (
-            s_pollPhase == PollPhase.VOTING && block.timestamp > s_startTime + i_registerDuration + i_voteDuration
+            s_pollPhase == PollPhase.VOTING &&
+            block.timestamp > s_startTime + i_registerDuration + i_voteDuration
         ) {
             s_pollPhase = PollPhase.ENDED;
         }
     }
 
-    function participate() external payable {
+    function register() external payable {
         updatePhase();
 
         if (s_pollPhase != PollPhase.REGISTER) revert RegisterNotOpen();
@@ -90,7 +98,11 @@ contract TrustPoll {
         resultCalculated = true;
     }
 
-    function getPollResult() external view returns (address winner, uint256[] memory votes) {
+    function getPollResult()
+        external
+        view
+        returns (address winner, uint256[] memory votes)
+    {
         return (s_winner, results);
     }
 

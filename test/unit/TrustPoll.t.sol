@@ -34,32 +34,32 @@ contract TrustPollTest is Test {
     function testPollRevertsWhenYouDontPayEnoughEth() public {
         vm.prank(CANDIDATE);
         vm.expectRevert(TrustPoll.SendMoreEth.selector);
-        trustPoll.participate();
+        trustPoll.register();
     }
 
     function testPollRevertsAlreadyRegistered() public {
         vm.prank(CANDIDATE);
-        trustPoll.participate{value: entranceFee}();
+        trustPoll.register{value: entranceFee}();
 
         vm.expectRevert(TrustPoll.AlreadyRegistered.selector);
         vm.prank(CANDIDATE);
-        trustPoll.participate{value: entranceFee}();
+        trustPoll.register{value: entranceFee}();
     }
 
     function testPollRevertsWhenVoteStarted() public {
         vm.prank(CANDIDATE);
-        trustPoll.participate{value: entranceFee}();
+        trustPoll.register{value: entranceFee}();
 
         vm.warp(block.timestamp + registerDuration + 1);
 
         vm.expectRevert(TrustPoll.RegisterNotOpen.selector);
         vm.prank(CANDIDATE);
-        trustPoll.participate{value: entranceFee}();
+        trustPoll.register{value: entranceFee}();
     }
 
     function testPollRevertsWhenVoteNotOpen() public {
         vm.prank(CANDIDATE);
-        trustPoll.participate{value: entranceFee}();
+        trustPoll.register{value: entranceFee}();
 
         vm.expectRevert(TrustPoll.VoteNotOpen.selector);
         vm.prank(VOTER);
@@ -68,7 +68,7 @@ contract TrustPollTest is Test {
 
     function testPollRevertsWhenVoteToNonCandidate() public {
         vm.prank(CANDIDATE);
-        trustPoll.participate{value: entranceFee}();
+        trustPoll.register{value: entranceFee}();
 
         vm.warp(block.timestamp + registerDuration + 1);
 
@@ -79,7 +79,7 @@ contract TrustPollTest is Test {
 
     function testPollRevertsWhenAlreadyVoted() public {
         vm.prank(CANDIDATE);
-        trustPoll.participate{value: entranceFee}();
+        trustPoll.register{value: entranceFee}();
 
         vm.warp(block.timestamp + registerDuration + 1);
 
@@ -93,7 +93,7 @@ contract TrustPollTest is Test {
 
     function testPollRevertsWhenCountNotOpen() public {
         vm.prank(CANDIDATE);
-        trustPoll.participate{value: entranceFee}();
+        trustPoll.register{value: entranceFee}();
 
         vm.warp(block.timestamp + registerDuration + 1);
 

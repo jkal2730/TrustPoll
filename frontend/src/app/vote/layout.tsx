@@ -9,13 +9,12 @@ export const metadata: Metadata = {
 };
 
 export default function VoteLayout(props: {
-  children: ReactNode}){
+  children: ReactNode
+}) {
   return (
-    <html lang="en">
-      <body>
-          <Header />
-          {props.children}
-      </body>
-    </html>
+    <>
+      <Header />
+      {props.children}
+    </>
   );
 }
