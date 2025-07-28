@@ -28,7 +28,7 @@ contract TrustPoll {
     PollPhase private s_pollPhase;
 
     mapping(address => uint256) public s_votes;
-    mapping(address => bool) private s_isCandidate;
+    mapping(address => bool) public s_isRegistered;
     mapping(address => bool) private s_hasVoted;
 
     constructor(uint256 entranceFee, uint256 voteDuration, uint256 registerDuration) {
@@ -56,9 +56,9 @@ contract TrustPoll {
 
         if (msg.value < i_entranceFee) revert SendMoreEth();
 
-        if (s_isCandidate[msg.sender]) revert AlreadyRegistered();
+        if (s_isRegistered[msg.sender]) revert AlreadyRegistered();
 
-        s_isCandidate[msg.sender] = true;
+        s_isRegistered[msg.sender] = true;
         s_candidates.push(payable(msg.sender));
     }
 
@@ -67,7 +67,7 @@ contract TrustPoll {
 
         if (s_pollPhase != PollPhase.VOTING) revert VoteNotOpen();
 
-        if (!s_isCandidate[candidate]) revert IsNotCandidate();
+        if (!s_isRegistered[candidate]) revert IsNotCandidate();
 
         if (s_hasVoted[msg.sender]) revert AlreadyVoted();
 
@@ -88,6 +88,18 @@ contract TrustPoll {
         }
         s_winner = s_candidates[winnerIndex];
         resultCalculated = true;
+    }
+
+    function isRegistered(address candidate) external view returns (bool) {
+        return s_isRegistered[candidate];
+    }
+
+    function hasVoted(address voter) external view returns (bool) {
+        return s_hasVoted[voter];
+    }
+
+    function forceSetPhase(PollPhase _phase) external {
+        s_pollPhase = _phase;
     }
 
     function getPollResult() external view returns (address winner, uint256[] memory votes) {

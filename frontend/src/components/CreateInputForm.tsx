@@ -21,7 +21,7 @@ const CreateInputForm = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    //e.preventDefault();
+    e.preventDefault();
     //console.log('Form submitted:', formData);
     const tSenderAddress = chainsToTSender[chainId]["tsender"]
     console.log("tsenderAddress: ", tSenderAddress)
