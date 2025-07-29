@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "TrustPoll",
 };
 
-export default function VoteLayout(props: {
+export default function RegisterLayout(props: {
   children: ReactNode
 }) {
   return (

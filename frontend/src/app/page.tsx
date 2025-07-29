@@ -19,7 +19,7 @@ export default function Home() {
           </button>
         </Link>
         <Link href="/register" passHref>
-          <button className="bg-blue-400 text-white px-8 py-4 rounded-2xl shadow-md hover:bg-blue-500 transition text-lg font-medium">
+          <button className="bg-blue-600 text-white px-8 py-4 rounded-2xl shadow-md hover:bg-blue-700 transition text-lg font-medium">
             Register
           </button>
         </Link>
@@ -27,6 +27,12 @@ export default function Home() {
         <Link href="/vote" passHref>
           <button className="bg-gray-100 text-blue-600 px-8 py-4 rounded-2xl shadow-md hover:bg-gray-200 transition text-lg font-medium border border-blue-600">
             Vote
+          </button>
+        </Link>
+
+        <Link href="/count" passHref>
+          <button className="bg-gray-100 text-blue-600 px-8 py-4 rounded-2xl shadow-md hover:bg-gray-200 transition text-lg font-medium border border-blue-600">
+            Count
           </button>
         </Link>
       </div>

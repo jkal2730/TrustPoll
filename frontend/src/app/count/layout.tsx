@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "TrustPoll",
 };
 
-export default function CreateLayout(props: {
+export default function CountLayout(props: {
   children: ReactNode
 }) {
   return (

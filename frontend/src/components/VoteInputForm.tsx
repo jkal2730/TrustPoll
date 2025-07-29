@@ -1,13 +1,15 @@
 "use client"
 import React from 'react';
 import InputField from '@/components/ui/InputField'
-import { trustPollAbi } from '../abi/trustPollAbi'
+import TrustPollContract from '@/contracts/TrustPoll.json'
 import { useWriteContract, useReadContract, useWaitForTransactionReceipt, useAccount } from 'wagmi'
 
 interface FormData {
   pollAddress: string;
   candidateAddress: string;
 }
+
+const trustPollAbi = TrustPollContract.abi;
 
 const VoteInputForm: React.FC = () => {
   const { writeContract, data: hash, error, isPending } = useWriteContract()

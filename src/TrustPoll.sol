@@ -75,7 +75,7 @@ contract TrustPoll {
         s_votes[candidate]++;
     }
 
-    function calPollResult() external {
+    function countPollResult() external {
         updatePhase();
 
         if (s_pollPhase != PollPhase.ENDED) revert CountNotOpen();
@@ -100,6 +100,10 @@ contract TrustPoll {
 
     function forceSetPhase(PollPhase _phase) external {
         s_pollPhase = _phase;
+    }
+
+    function resultCalculatedStatus() external view returns (bool) {
+        return resultCalculated;
     }
 
     function getPollResult() external view returns (address winner, uint256[] memory votes) {

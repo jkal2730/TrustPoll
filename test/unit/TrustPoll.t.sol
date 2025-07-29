@@ -101,6 +101,6 @@ contract TrustPollTest is Test {
         trustPoll.vote(CANDIDATE);
 
         vm.expectRevert(TrustPoll.CountNotOpen.selector);
-        trustPoll.calPollResult();
+        trustPoll.countPollResult();
     }
 }
